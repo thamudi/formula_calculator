@@ -12,9 +12,9 @@ class Formula:
 
     """ A global variable that holds the input string """
 
-    parent_list = []
-    temp_list   = []
-    total_list  = []
+    string_list = []
+    nested_list = []
+    return_list  = []
 
     def __init__(self):
 
@@ -25,84 +25,78 @@ class Formula:
         pass
 
 
-    def _validate_input(self, data_list):
+    def _validate_input(self, nested_list):
 
         """ Validation function for the splited string to check if the list values are according to critira """
-        if len(data_list) != 3:
+
+        if ( len(nested_list[0]) != 3 ) or (len(nested_list[1]) != 3 ) or (len(nested_list[2]) != 3 )  :
             raise IndexError
         else:
-            for x in data_list:
-                if isinstance(x, float) or isinstance(float(x), float):
-                    pass
-                else:
-                    raise ValueError
+            for x in range(len(nested_list)):
+                for y in range(len(nested_list[x])):
+                    if isinstance(nested_list[x][y],float) or isinstance(float(nested_list[x][y]),float):
+                        pass
+                    else:
+                        raise ValueError
 
-    def _split(self,data_string,temp_list):
+    def _split(self,data_string,nested_list):
 
         """ Split function that returns the passed string as a list """
-        temp_list.append(data_string.split(','))
+        nested_list.append(data_string.split(','))
 
-
-    def _stringify_list(self, total_list):
+    def _stringify_list(self, return_list):
 
         string_output = ""
 
-        for x in range(len(total_list)):
-            string_output += str(total_list[x])
+        for x in range(len(return_list)):
+            string_output += str(return_list[x])
 
-            if  x == (len(total_list) - 1):
+            if  x == (len(return_list) - 1):
                 pass
             else:
                 string_output +=' , '
 
         print("Your calulated input = "+string_output)
 
-    def _calculate_formula_one(self,data_list):
-
-        calculated_data = float(data_list[0])*( float(data_list[1]) + float(data_list[2]) ) - float(data_list[0])/2
-        total_list.append(str(calculated_data))
+    def _calculate_formula_one(self,nested_list):
+        count = 0
+        for x in range(len(nested_list)):
+            calculated_data = float(nested_list[0][count])*( float(nested_list[1][count]) + float(nested_list[2][count]) ) - float(nested_list[0][count])/2
+            count += 1
+            return_list.append(str(calculated_data))
 
     def input_function(self):
 
-        global parent_list
-        parent_list = []
+        global string_list
+        string_list = []
         list_length = ['x','y','z']
         for x in list_length:
-
-            child_list= []
-            input_value = input("list: "+x+" Please enter your numbers separated by a ',' the lists should be all equal in length: ")
-            child_list.append(input_value)
-            parent_list.append(child_list)
-
-        print(range(len(parent_list)))
-
+            input_value = input("list: "+x+" | Please enter your three numbers separated by a ',': ")
+            string_list.append(input_value)
 
     def error_handeler(self):
-        global total_list
-        global temp_list
-        temp_list  = []
-        total_list = []
+        global return_list
+        global nested_list
+        nested_list  = []
+        return_list   = []
 
         try:
             """ split the string """
-
-            for x in range(len(parent_list)):
-                self._split(parent_list[x][0],temp_list)
-
+            for x in range(len(string_list)):
+                self._split(string_list[x],nested_list)
             try:
                 """" Validate the input data """
-                self._validate_input(temp_list)
+                self._validate_input(nested_list)
             except ValueError:
-                print("ERROR: The values that were entered does not match the critira of being numeric or not empty ")
+                return print("ERROR: The values that were entered does not match the critira of being numeric or not empty ")
             except IndexError:
-                print("ERROR: The values entered was out of range ")
+                return print("ERROR: The values entered was out of range ")
             else:
-                self._calculate_formula_one(temp_list)
+                self._calculate_formula_one(nested_list)
         except NameError:
-            print("ERROR: Please enter your values before calculating them")
-
+            return print("ERROR: Please enter your values before calculating them")
         else:
-            self._stringify_list(total_list)
+            self._stringify_list(return_list)
 
 
 
@@ -116,7 +110,7 @@ def display_menu():
     Display Menu Options Content
     """
 
-    print('1. Enter your number of literation')
+    print('1. Input the values')
     print('2. Calculate the input using Formula one')
     print('0. Exit program')
     print()
