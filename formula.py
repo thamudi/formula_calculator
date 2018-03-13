@@ -11,9 +11,10 @@ Git Repo    : https://github.com/thamudi/formula_calculator.git
 class Formula:
 
     """ A global variable that holds the input string """
-    data_string = ""
+
     parent_list = []
-    total_list = []
+    temp_list   = []
+    total_list  = []
 
     def __init__(self):
 
@@ -36,11 +37,11 @@ class Formula:
                 else:
                     raise ValueError
 
-    def _split(self,data_string):
+    def _split(self,data_string,temp_list):
 
         """ Split function that returns the passed string as a list """
+        temp_list.append(data_string.split(','))
 
-        return data_string.split(',')
 
     def _stringify_list(self, total_list):
 
@@ -63,54 +64,40 @@ class Formula:
 
     def input_function(self):
 
-        valid = False
-        while not valid:
-            try:
-                input_literation = int(input('Enter the number of times you want to run the process: '))
-                if input_literation > 0:
-                    pass
-                    valid = True
-                else:
-                    raise ValueError
-            except ValueError:
-                print("Please enter Natural Numbers larger than zero")
-        else:
+        global parent_list
+        parent_list = []
+        list_length = ['x','y','z']
+        for x in list_length:
 
-            i = 0
-            global parent_list
-            parent_list = []
-            while i < input_literation:
+            child_list= []
+            input_value = input("list: "+x+" Please enter your numbers separated by a ',' the lists should be all equal in length: ")
+            child_list.append(input_value)
+            parent_list.append(child_list)
 
-                child_list= []
-
-                input_value = input("Please enter your numbers separated by a , and no more than 3 values : ")
-
-                child_list.append(input_value)
-                parent_list.append(child_list)
-                i+=1
+        print(range(len(parent_list)))
 
 
     def error_handeler(self):
         global total_list
+        global temp_list
+        temp_list  = []
         total_list = []
-        """ Calculation Formula for the data that was inputed by the user """
+
         try:
             """ split the string """
+
             for x in range(len(parent_list)):
-                try:
-                    data_list = self._split(parent_list[x][0])
-                except NameError:
-                    print("ERROR: Please enter your values before calculating them")
-                else:
-                    try:
-                        """" Validate the input data """
-                        self._validate_input(data_list)
-                    except ValueError:
-                        print("ERROR: The values that were entered does not match the critira of being numeric or not empty ")
-                    except IndexError:
-                        print("ERROR: The values entered was out of range ")
-                    else:
-                        self._calculate_formula_one(data_list)
+                self._split(parent_list[x][0],temp_list)
+
+            try:
+                """" Validate the input data """
+                self._validate_input(temp_list)
+            except ValueError:
+                print("ERROR: The values that were entered does not match the critira of being numeric or not empty ")
+            except IndexError:
+                print("ERROR: The values entered was out of range ")
+            else:
+                self._calculate_formula_one(temp_list)
         except NameError:
             print("ERROR: Please enter your values before calculating them")
 
@@ -155,7 +142,6 @@ def get_menu_choice():
 
     return choice
 
-
 def manage_menu(self):
 
     """
@@ -188,7 +174,6 @@ def manage_menu(self):
             print()
 
     print('Thank you for using our Formula Calculation program')
-
 
 def main():
 
