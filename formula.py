@@ -44,20 +44,6 @@ class Formula:
         """ Split function that returns the passed string as a list """
         nested_list.append(data_string.split(','))
 
-    def _stringify_list(self, return_list):
-
-        string_output = ""
-
-        for x in range(len(return_list)):
-            string_output += str(return_list[x])
-
-            if  x == (len(return_list) - 1):
-                pass
-            else:
-                string_output +=' , '
-
-        print("Your calulated input = "+string_output)
-
     def _calculate_formula_one(self,nested_list):
         count = 0
         for x in range(len(nested_list)):
@@ -96,7 +82,7 @@ class Formula:
         except NameError:
             return print("ERROR: Please enter your values before calculating them")
         else:
-            self._stringify_list(return_list)
+            print(','.join(return_list))
 
 
 
